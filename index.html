@@ -50,7 +50,29 @@
       return mesh;
     }
     
-    function BoxEdges(w, h, d, edge_thickness) {
+    function Cyline(v_start, v_end, material){
+      var HALF_PI = Math.PI * .5;
+      var distance = v_start.distanceTo(v_end);
+      var v_center  = v_end.clone().add(v_start).divideScalar(2);
+      
+      var cylinder = new THREE.CylinderGeometry(1, 1, distance, 6, 6, false);
+      
+      var orientation = new THREE.Matrix4();
+      var offsetRotation = new THREE.Matrix4();
+      // var offsetPosition = new THREE.Matrix4();
+      orientation.lookAt(v_start, v_end, new THREE.Vector3(0,1,0));
+      offsetRotation.makeRotationX(HALF_PI);
+      orientation.multiply(offsetRotation);
+      cylinder.applyMatrix(orientation);
+      
+      var mesh = new THREE.Mesh(cylinder, material);
+      mesh.position = v_center;
+      // mesh.visible = false;
+      return mesh;
+    }
+
+    
+    function BoxEdges(box, edge_thickness) {
       
       var material = new THREE.MeshBasicMaterial({
         color: 0xff0077
@@ -86,35 +108,118 @@
       // beb.updateMatrix();
       // geometry.merge(beb.geometry, beb.matrix);
       
-      var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, h, edge_thickness, material);
-      geometry.merge(beb.geometry, beb.matrix);
+      var min = box.min;
+      var max = box.max;
       
-      var beb = new BoxEdgeBox(-w/2, h/2, -d/2, edge_thickness, h, edge_thickness, material);
-      geometry.merge(beb.geometry, beb.matrix);
+      /*
+        5____4
+      1/___0/|
+      | 6__|_7
+      2/___3/
+      0: max.x, max.y, max.z
+      1: min.x, max.y, max.z
+      2: min.x, min.y, max.z
+      3: max.x, min.y, max.z
+      4: max.x, max.y, min.z
+      5: min.x, max.y, min.z
+      6: min.x, min.y, min.z
+      7: max.x, min.y, min.z
+      */
       
-      var beb = new BoxEdgeBox(w/2, -h/2, d/2, edge_thickness, h, edge_thickness, material);
-      geometry.merge(beb.geometry, beb.matrix);
+      // var position = this.geometry.attributes.position;
+      // var array = position.array;
       
-      var beb = new BoxEdgeBox(-w/2, -h/2, -d/2, edge_thickness, h, edge_thickness, material);
-      geometry.merge(beb.geometry, beb.matrix);
+      // array[  0 ] = max.x; array[  1 ] = max.y; array[  2 ] = max.z;
+      // array[  3 ] = min.x; array[  4 ] = max.y; array[  5 ] = max.z;
+      // array[  6 ] = min.x; array[  7 ] = min.y; array[  8 ] = max.z;
+      // array[  9 ] = max.x; array[ 10 ] = min.y; array[ 11 ] = max.z;
+      // array[ 12 ] = max.x; array[ 13 ] = max.y; array[ 14 ] = min.z;
+      // array[ 15 ] = min.x; array[ 16 ] = max.y; array[ 17 ] = min.z;
+      // array[ 18 ] = min.x; array[ 19 ] = min.y; array[ 20 ] = min.z;
+      // array[ 21 ] = max.x; array[ 22 ] = min.y; array[ 23 ] = min.z;
       
-      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // position.needsUpdate = true;
+      
+
+      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, h, edge_thickness, material);
       // geometry.merge(beb.geometry, beb.matrix);
       
-      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // var beb = new BoxEdgeBox(-w/2, h/2, -d/2, edge_thickness, h, edge_thickness, material);
       // geometry.merge(beb.geometry, beb.matrix);
       
-      // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // var beb = new BoxEdgeBox(w/2, -h/2, d/2, edge_thickness, h, edge_thickness, material);
       // geometry.merge(beb.geometry, beb.matrix);
       
-      // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // var beb = new BoxEdgeBox(-w/2, -h/2, -d/2, edge_thickness, h, edge_thickness, material);
       // geometry.merge(beb.geometry, beb.matrix);
+      
+      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // // geometry.merge(beb.geometry, beb.matrix);
+      
+      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // // geometry.merge(beb.geometry, beb.matrix);
+      
+      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // // geometry.merge(beb.geometry, beb.matrix);
+      
+      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // // geometry.merge(beb.geometry, beb.matrix);
+      
+      /*
+        5____4
+      1/___0/|
+      | 6__|_7
+      2/___3/
+      0: max.x, max.y, max.z
+      1: min.x, max.y, max.z
+      2: min.x, min.y, max.z
+      3: max.x, min.y, max.z
+      4: max.x, max.y, min.z
+      5: min.x, max.y, min.z
+      6: min.x, min.y, min.z
+      7: max.x, min.y, min.z
+      */
+      
+      var indices = new Uint16Array( [ 0, 1, 1, 2, 2, 3, 3, 0, 4, 5, 5, 6, 6, 7, 7, 4, 0, 4, 1, 5, 2, 6, 3, 7 ] );
+      var positions = new Float32Array( 8 * 3 );
+
+      positions[  0 ] = max.x; positions[  1 ] = max.y; positions[  2 ] = max.z;
+      positions[  3 ] = min.x; positions[  4 ] = max.y; positions[  5 ] = max.z;
+      positions[  6 ] = min.x; positions[  7 ] = min.y; positions[  8 ] = max.z;
+      positions[  9 ] = max.x; positions[ 10 ] = min.y; positions[ 11 ] = max.z;
+      positions[ 12 ] = max.x; positions[ 13 ] = max.y; positions[ 14 ] = min.z;
+      positions[ 15 ] = min.x; positions[ 16 ] = max.y; positions[ 17 ] = min.z;
+      positions[ 18 ] = min.x; positions[ 19 ] = min.y; positions[ 20 ] = min.z;
+      positions[ 21 ] = max.x; positions[ 22 ] = min.y; positions[ 23 ] = min.z;
+      
+      // var material = new THREE.MeshBasicMaterial({ color: colour, transparent: true, opacity: 0.8 });
+      
+      // var beb = new BoxEdgeBox(max.x, max.y, max.z);
+      // geometry.merge(beb.geometry, beb.matrix);
+      for(var i=0; i<indices.length; i+=6){
+        var v_start = new THREE.Vector3(
+          indices[i + 0],
+          indices[i + 1],
+          indices[i + 2]
+        );
+        var v_end = new THREE.Vector3(
+          indices[i + 3],
+          indices[i + 4],
+          indices[i + 5]
+        );
+        var cyline = Cyline(v_start, v_end, material);
+        geometry.merge(cyline.geometry, cyline.matrix);
+      }
+      
       
       return new THREE.Mesh(geometry, material);
     }
     
     function Box(w, h, d) {
       
+      // var box3 = new THREE.Box3(-w/2, -h/2, -d/2, w/2, h/2, d/2);
+      var box3 = new THREE.Box3();
+      box3.setFromCenterAndSize(new THREE.Vector3(), w, h, d);
       var box = new THREE.Object3D();
       
       var geometry = new THREE.BoxGeometry(w, h, d);
@@ -131,7 +236,8 @@
       mesh = new THREE.Mesh(geometry, material);
       box.add(mesh);
       
-      edges = new BoxEdges(w, h, d, 1);
+      // edges = new BoxEdges(w, h, d, 1);
+      edges = new BoxEdges(box3, 1);
       edges.material.color.set(0xff0077);
       box.add(edges);
       
