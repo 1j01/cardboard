@@ -27,6 +27,8 @@
   <script src="js/third-party/threejs/OrbitControls.js"></script>
 
   <script>
+    /* global THREE */
+    
     var camera, scene, renderer;
     var effect, controls;
     var element, container;
@@ -111,10 +113,39 @@
       var geometry = new THREE.BoxGeometry( 20, 20, 20 );
       var material = new THREE.MeshBasicMaterial( { map: texture, wireframe: true } );
 
-      mesh = new THREE.Mesh( geometry, material );
+      // mesh = new THREE.Mesh( geometry, material );
+      // material.lineWidth = 2;
+      // mesh.position.x = 50;
+      // mesh.position.y = 20;
+      // scene.add(mesh);
+      
+      // var cube = new THREE.BoxHelper(mesh);
+      // cube.material.color.setRGB( 1, 0, 0 );
+      // cube.scale.set( 2, 2, 2 );
+      // cube.position.x = 55;
+      // cube.position.y = 25;
+      // cube.material.linewidth = 2;
+      // scene.add(cube);
+
+
+      mesh = new THREE.Mesh(geometry, material);
+      mesh.visible = false;
       mesh.position.x = 50;
-      mesh.position.y = 20;
-      scene.add( mesh );
+      mesh.position.y = 15;
+      scene.add(mesh);
+      
+      // helper = new THREE.WireframeHelper(mesh);
+      // helper.material.color.set(0x0000ff);
+      // helper.visible = false;
+      // scene.add(helper);
+  
+      cube = new THREE.BoxHelper(mesh);
+      cube.material.color.set(0xffffff);
+      scene.add(cube);
+
+      // camera.position.set(0, 100, 0);
+      // camera.lookAt(scene.position);
+
     }
 
     function resize() {
