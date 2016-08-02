@@ -190,39 +190,24 @@
       box.add(edges);
       // mesh.add(edges);
       
-      scene.add(box);
-      
       return box;
     }
     
     function Tunnel(w, h, l) {
-      
-      // var ground = Box(l, 5, h);
-      
-      // var ceiling = Box(l, 5, h);
-      // ceiling.position.y = h;
-      
-      // var left_wall = Box(l, h, 5);
-      // left_wall.position.y = h/2;
-      // left_wall.position.z = -w/2;
-      
-      // var right_wall = Box(l, h, 5);
-      // right_wall.position.y = h/2;
-      // right_wall.position.z = +w/2;
-      
+      var obj = new THREE.Object3D();
       var t = 5;
-      
-      // one way to do it
-      // var ground = Box(0, 0, 0, l+t, t, h+t);
-      // var ceiling = Box(0, h, 0, l+t, t, h+t);
-      // var left_wall = Box(0, h/2, -w/2, l+t, h+t, t);
-      // var right_wall = Box(0, h/2, +w/2, l+t, h+t, t);
       
       var ground = Box(0, 0, 0, l, t, h);
       var ceiling = Box(0, h+t, 0, l, t, h);
       var left_wall = Box(0, (h+t)/2, -(w+t)/2, l, h, t);
       var right_wall = Box(0, (h+t)/2, +(w+t)/2, l, h, t);
       
+      obj.add(ground);
+      obj.add(ceiling);
+      obj.add(left_wall);
+      obj.add(right_wall);
+      
+      return obj;
     }
     
     function init() {
@@ -244,7 +229,7 @@
       controls = new THREE.OrbitControls(camera, element);
       controls.rotateUp(Math.PI / 4);
       controls.target.set(
-        camera.position.x + 0.1,
+        camera.position.x,
         camera.position.y,
         camera.position.z
       );
@@ -296,7 +281,9 @@
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
       
-      Tunnel(50, 50, 100);
+      var tunnel = Tunnel(50, 50, 200);
+      tunnel.rotation.y = -Math.PI / 2;
+      scene.add(tunnel);
     }
 
     function resize() {
