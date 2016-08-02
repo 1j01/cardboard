@@ -198,14 +198,14 @@
       // geometry.merge(beb.geometry, beb.matrix);
       for(var i=0; i<indices.length; i+=6){
         var v_start = new THREE.Vector3(
-          indices[i + 0],
-          indices[i + 1],
-          indices[i + 2]
+          positions[indices[i + 0]],
+          positions[indices[i + 1]],
+          positions[indices[i + 2]]
         );
         var v_end = new THREE.Vector3(
-          indices[i + 3],
-          indices[i + 4],
-          indices[i + 5]
+          positions[indices[i + 3]],
+          positions[indices[i + 4]],
+          positions[indices[i + 5]]
         );
         var cyline = Cyline(v_start, v_end, material);
         geometry.merge(cyline.geometry, cyline.matrix);
