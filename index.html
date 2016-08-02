@@ -41,17 +41,7 @@
     // var level = {};
     // var blocks = [];
     
-    
-    function BoxEdgeBox(x, y, z, w, h, d, material) {
-      var geometry = new THREE.BoxGeometry(w, h, d);
-      var mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(x, y, z);
-      mesh.updateMatrix();
-      return mesh;
-    }
-    
     function Cyline(v_start, v_end, radius_start, radius_end, radius_segments, height_segments, open_ended, material){
-      var HALF_PI = Math.PI * .5;
       var distance = v_start.distanceTo(v_end);
       var v_center  = v_end.clone().add(v_start).divideScalar(2);
       
@@ -59,111 +49,27 @@
       
       var orientation = new THREE.Matrix4();
       var offsetRotation = new THREE.Matrix4();
-      // var offsetPosition = new THREE.Matrix4();
-      orientation.lookAt(v_start, v_end, new THREE.Vector3(0,1,0));
-      offsetRotation.makeRotationX(HALF_PI);
+      orientation.lookAt(v_start, v_end, new THREE.Vector3(0, 1, 0));
+      offsetRotation.makeRotationX(Math.PI / 2);
       orientation.multiply(offsetRotation);
       cylinder.applyMatrix(orientation);
       
       var mesh = new THREE.Mesh(cylinder, material);
       mesh.position = v_center;
-      // mesh.visible = false;
       return mesh;
     }
 
     
     function BoxEdges(box, edge_thickness) {
       
-      var material = new THREE.MeshBasicMaterial({
+      var material = new THREE.MeshLambertMaterial({
         color: 0xff0077
       });
       
       var geometry = new THREE.Geometry();
-      // var beb = new BoxEdgeBox(w, h, d, material);
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
-      // beb.position.x = w/2;
-      // beb.position.y = h/2;
-      // beb.updateMatrix();
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
-      // beb.position.x = -w/2;
-      // beb.position.y = h/2;
-      // beb.updateMatrix();
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
-      // beb.position.x = w/2;
-      // beb.position.y = h/2;
-      // beb.position.z = -d/2;
-      // beb.updateMatrix();
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
-      // beb.position.x = -w/2;
-      // beb.position.y = h/2;
-      // beb.position.z = d/2;
-      // beb.updateMatrix();
-      // geometry.merge(beb.geometry, beb.matrix);
       
       var min = box.min;
       var max = box.max;
-      
-      /*
-        5____4
-      1/___0/|
-      | 6__|_7
-      2/___3/
-      0: max.x, max.y, max.z
-      1: min.x, max.y, max.z
-      2: min.x, min.y, max.z
-      3: max.x, min.y, max.z
-      4: max.x, max.y, min.z
-      5: min.x, max.y, min.z
-      6: min.x, min.y, min.z
-      7: max.x, min.y, min.z
-      */
-      
-      // var position = this.geometry.attributes.position;
-      // var array = position.array;
-      
-      // array[  0 ] = max.x; array[  1 ] = max.y; array[  2 ] = max.z;
-      // array[  3 ] = min.x; array[  4 ] = max.y; array[  5 ] = max.z;
-      // array[  6 ] = min.x; array[  7 ] = min.y; array[  8 ] = max.z;
-      // array[  9 ] = max.x; array[ 10 ] = min.y; array[ 11 ] = max.z;
-      // array[ 12 ] = max.x; array[ 13 ] = max.y; array[ 14 ] = min.z;
-      // array[ 15 ] = min.x; array[ 16 ] = max.y; array[ 17 ] = min.z;
-      // array[ 18 ] = min.x; array[ 19 ] = min.y; array[ 20 ] = min.z;
-      // array[ 21 ] = max.x; array[ 22 ] = min.y; array[ 23 ] = min.z;
-      
-      // position.needsUpdate = true;
-      
-
-      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, h, edge_thickness, material);
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(-w/2, h/2, -d/2, edge_thickness, h, edge_thickness, material);
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(w/2, -h/2, d/2, edge_thickness, h, edge_thickness, material);
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // var beb = new BoxEdgeBox(-w/2, -h/2, -d/2, edge_thickness, h, edge_thickness, material);
-      // geometry.merge(beb.geometry, beb.matrix);
-      
-      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
-      // // geometry.merge(beb.geometry, beb.matrix);
-      
-      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
-      // // geometry.merge(beb.geometry, beb.matrix);
-      
-      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
-      // // geometry.merge(beb.geometry, beb.matrix);
-      
-      // // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
-      // // geometry.merge(beb.geometry, beb.matrix);
       
       /*
         5____4
@@ -240,7 +146,7 @@
       box.add(mesh);
       
       // edges = new BoxEdges(w, h, d, 1);
-      edges = new BoxEdges(box3, 1);
+      edges = new BoxEdges(box3, 10);
       edges.material.color.set(0xff0077);
       box.add(edges);
       
