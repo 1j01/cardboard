@@ -41,6 +41,28 @@
     // var level = {};
     // var blocks = [];
     
+    function Box() {
+      
+      var geometry = new THREE.BoxGeometry( 20, 20, 20 );
+      var material = new THREE.MeshBasicMaterial( { color: 0x550033,
+        polygonOffset: true,
+        polygonOffsetFactor: 2, // positive value pushes polygon further away
+        polygonOffsetUnits: 1
+      } );
+
+      mesh = new THREE.Mesh(geometry, material);
+      // mesh.visible = false;
+      // mesh.scale.set( 0.2, 0.2, 0.2 );
+      scene.add(mesh);
+      
+      cube = new THREE.BoxHelper(mesh);
+      cube.material.color.set(0xffffff);
+      cube.scale.set( 2, 2, 2 );
+      scene.add(cube);
+      
+      return mesh;
+    }
+    
     function init() {
       renderer = new THREE.WebGLRenderer();
       renderer.setClearColor(0x000000, 1);
@@ -110,21 +132,21 @@
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
       
-      var geometry = new THREE.BoxGeometry( 20, 20, 20 );
-      var material = new THREE.MeshBasicMaterial( { color: 0x55aa55, opacity: 0.5, transparent: true } );
-
-      mesh = new THREE.Mesh(geometry, material);
-      // mesh.visible = false;
-      mesh.position.x = 50;
-      mesh.position.y = 15;
-      // mesh.scale.set( 0.2, 0.2, 0.2 );
-      scene.add(mesh);
       
-      cube = new THREE.BoxHelper(mesh);
-      cube.material.color.set(0xffffff);
-      cube.scale.set( 2, 2, 2 );
-      scene.add(cube);
-
+      var box = Box();
+      box.position.x = 50;
+      box.position.y = 15;
+      
+      var box = Box();
+      box.position.x = 50;
+      box.position.y = 15;
+      box.position.z = 30;
+      
+      var box = Box();
+      box.position.x = 50;
+      box.position.y = 15;
+      box.position.z = -30;
+      
       // camera.position.set(0, 100, 0);
       // camera.lookAt(scene.position);
 
