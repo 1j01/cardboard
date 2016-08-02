@@ -36,9 +36,12 @@
     init();
     animate();
 
+    // var level = {};
+    // var blocks = [];
+    
     function init() {
       renderer = new THREE.WebGLRenderer();
-      renderer.setClearColorHex(0x000010, 1);
+      renderer.setClearColor(0x000000, 1);
       element = renderer.domElement;
       container = document.getElementById('example');
       container.appendChild(element);
@@ -81,7 +84,7 @@
       scene.add(light);
 
       var texture = THREE.ImageUtils.loadTexture(
-        'textures/patterns/snow.png'
+        'textures/patterns/checker.png'
       );
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
@@ -104,6 +107,14 @@
 
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
+      
+      var geometry = new THREE.BoxGeometry( 20, 20, 20 );
+      var material = new THREE.MeshBasicMaterial( { map: texture, wireframe: true } );
+
+      mesh = new THREE.Mesh( geometry, material );
+      mesh.position.x = 50;
+      mesh.position.y = 20;
+      scene.add( mesh );
     }
 
     function resize() {
