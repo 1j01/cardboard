@@ -41,24 +41,103 @@
     // var level = {};
     // var blocks = [];
     
+    
+    function BoxEdgeBox(x, y, z, w, h, d, material) {
+      var geometry = new THREE.BoxGeometry(w, h, d);
+      var mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(x, y, z);
+      mesh.updateMatrix();
+      return mesh;
+    }
+    
+    function BoxEdges(w, h, d, edge_thickness) {
+      
+      var material = new THREE.MeshBasicMaterial({
+        color: 0xff0077
+      });
+      
+      var geometry = new THREE.Geometry();
+      // var beb = new BoxEdgeBox(w, h, d, material);
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
+      // beb.position.x = w/2;
+      // beb.position.y = h/2;
+      // beb.updateMatrix();
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
+      // beb.position.x = -w/2;
+      // beb.position.y = h/2;
+      // beb.updateMatrix();
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
+      // beb.position.x = w/2;
+      // beb.position.y = h/2;
+      // beb.position.z = -d/2;
+      // beb.updateMatrix();
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(edge_thickness, h, edge_thickness, material);
+      // beb.position.x = -w/2;
+      // beb.position.y = h/2;
+      // beb.position.z = d/2;
+      // beb.updateMatrix();
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, h, edge_thickness, material);
+      geometry.merge(beb.geometry, beb.matrix);
+      
+      var beb = new BoxEdgeBox(-w/2, h/2, -d/2, edge_thickness, h, edge_thickness, material);
+      geometry.merge(beb.geometry, beb.matrix);
+      
+      var beb = new BoxEdgeBox(w/2, -h/2, d/2, edge_thickness, h, edge_thickness, material);
+      geometry.merge(beb.geometry, beb.matrix);
+      
+      var beb = new BoxEdgeBox(-w/2, -h/2, -d/2, edge_thickness, h, edge_thickness, material);
+      geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(w/2, h/2, d/2, edge_thickness, edge_thickness, h, material);
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      // var beb = new BoxEdgeBox(w/2, h/2, d/2, h, edge_thickness, edge_thickness, material);
+      // geometry.merge(beb.geometry, beb.matrix);
+      
+      return new THREE.Mesh(geometry, material);
+    }
+    
     function Box(w, h, d) {
+      
+      var box = new THREE.Object3D();
       
       var geometry = new THREE.BoxGeometry(w, h, d);
       var material = new THREE.MeshLambertMaterial({
-        color: 0x550033,
-        polygonOffset: true,
-        polygonOffsetFactor: 2, // positive value pushes polygon further away
-        polygonOffsetUnits: 1
+        // color: 0x550033,
+        color: 0xffffff,
+        opacity: 0.2,
+        transparent: true,
+        // polygonOffset: true,
+        // polygonOffsetFactor: 2, // positive value pushes polygon further away
+        // polygonOffsetUnits: 1
       });
 
       mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
+      box.add(mesh);
       
-      cube = new THREE.BoxHelper(mesh);
-      cube.material.color.set(0xff0077);
-      scene.add(cube);
+      edges = new BoxEdges(w, h, d, 1);
+      edges.material.color.set(0xff0077);
+      box.add(edges);
       
-      return mesh;
+      scene.add(box);
+      
+      return box;
     }
     
     function Tunnel(w, h, l) {
@@ -142,7 +221,7 @@
 
       var mesh = new THREE.Mesh(geometry, material);
       mesh.rotation.x = -Math.PI / 2;
-      scene.add(mesh);
+      // scene.add(mesh);
 
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
@@ -163,8 +242,8 @@
       // box.position.y = 15;
       // box.position.z = -30;
       
-      // camera.position.set(0, 100, 0);
-      // camera.lookAt(scene.position);
+      camera.position.set(0, 40, 0);
+      camera.lookAt(scene.position);
 
     }
 
