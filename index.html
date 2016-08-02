@@ -210,16 +210,25 @@
       // right_wall.position.y = h/2;
       // right_wall.position.z = +w/2;
       
-      var ground = Box(0, 0, 0, l, 5, h);
-      var ceiling = Box(0, h, 0, l, 5, h);
-      var left_wall = Box(0, h/2, -w/2, l, h, 5);
-      var right_wall = Box(0, h/2, +w/2, l, h, 5);
+      var t = 5;
+      
+      // one way to do it
+      // var ground = Box(0, 0, 0, l+t, t, h+t);
+      // var ceiling = Box(0, h, 0, l+t, t, h+t);
+      // var left_wall = Box(0, h/2, -w/2, l+t, h+t, t);
+      // var right_wall = Box(0, h/2, +w/2, l+t, h+t, t);
+      
+      var ground = Box(0, 0, 0, l, t, h);
+      var ceiling = Box(0, h+t, 0, l, t, h);
+      var left_wall = Box(0, (h+t)/2, -(w+t)/2, l, h, t);
+      var right_wall = Box(0, (h+t)/2, +(w+t)/2, l, h, t);
       
     }
     
     function init() {
       renderer = new THREE.WebGLRenderer();
-      renderer.setClearColor(0x000000, 1);
+      // renderer.setClearColor(0x000000, 1);
+      renderer.setClearColor(0x555555, 1);
       element = renderer.domElement;
       container = document.getElementById('example');
       container.appendChild(element);
@@ -287,7 +296,7 @@
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
       
-      Tunnel(50, 50, 200);
+      Tunnel(50, 50, 100);
       
       // var box = Box();
       // box.position.x = 50;
