@@ -63,7 +63,7 @@
     
     function BoxEdges(box, edge_thickness) {
       
-      var material = new THREE.MeshLambertMaterial({
+      var material = new THREE.MeshBasicMaterial({
         color: 0xff0077
       });
       
@@ -181,7 +181,7 @@
 
       mesh = new THREE.Mesh(geometry, material);
       mesh.position.set(x, y, z);
-      mesh.visible = false;
+      // mesh.visible = false;
       box.add(mesh);
       
       // edges = new BoxEdges(w, h, d, 1);
@@ -237,7 +237,7 @@
 
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera(90, 1, 0.001, 700);
+      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700);
       camera.position.set(0, 25, 0);
       scene.add(camera);
 
@@ -297,21 +297,6 @@
       setTimeout(resize, 1);
       
       Tunnel(50, 50, 100);
-      
-      // var box = Box();
-      // box.position.x = 50;
-      // box.position.y = 15;
-      
-      // var box = Box();
-      // box.position.x = 50;
-      // box.position.y = 15;
-      // box.position.z = 30;
-      
-      // var box = Box();
-      // box.position.x = 50;
-      // box.position.y = 15;
-      // box.position.z = -30;
-      
     }
 
     function resize() {
