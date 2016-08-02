@@ -41,26 +41,41 @@
     // var level = {};
     // var blocks = [];
     
-    function Box() {
+    function Box(w, h, d) {
       
-      var geometry = new THREE.BoxGeometry( 20, 20, 20 );
-      var material = new THREE.MeshBasicMaterial( { color: 0x550033,
+      var geometry = new THREE.BoxGeometry(w, h, d);
+      var material = new THREE.MeshLambertMaterial({
+        color: 0x550033,
         polygonOffset: true,
         polygonOffsetFactor: 2, // positive value pushes polygon further away
         polygonOffsetUnits: 1
-      } );
+      });
 
       mesh = new THREE.Mesh(geometry, material);
-      // mesh.visible = false;
-      // mesh.scale.set( 0.2, 0.2, 0.2 );
       scene.add(mesh);
       
       cube = new THREE.BoxHelper(mesh);
-      cube.material.color.set(0xffffff);
-      cube.scale.set( 2, 2, 2 );
+      cube.material.color.set(0xff0077);
       scene.add(cube);
       
       return mesh;
+    }
+    
+    function Tunnel(w, h, l) {
+      
+      var ground = Box(l, 5, h);
+      
+      var ceiling = Box(l, 5, h);
+      ceiling.position.y = h;
+      
+      var left_wall = Box(l, h, 5);
+      left_wall.position.y = h/2;
+      left_wall.position.z = -w/2;
+      
+      var right_wall = Box(l, h, 5);
+      right_wall.position.y = h/2;
+      right_wall.position.z = +w/2;
+      
     }
     
     function init() {
@@ -132,20 +147,21 @@
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
       
+      Tunnel(50, 50, 200);
       
-      var box = Box();
-      box.position.x = 50;
-      box.position.y = 15;
+      // var box = Box();
+      // box.position.x = 50;
+      // box.position.y = 15;
       
-      var box = Box();
-      box.position.x = 50;
-      box.position.y = 15;
-      box.position.z = 30;
+      // var box = Box();
+      // box.position.x = 50;
+      // box.position.y = 15;
+      // box.position.z = 30;
       
-      var box = Box();
-      box.position.x = 50;
-      box.position.y = 15;
-      box.position.z = -30;
+      // var box = Box();
+      // box.position.x = 50;
+      // box.position.y = 15;
+      // box.position.z = -30;
       
       // camera.position.set(0, 100, 0);
       // camera.lookAt(scene.position);
