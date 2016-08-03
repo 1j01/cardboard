@@ -130,7 +130,9 @@
       box.add(mesh);
       
       
-      var edge_material = new THREE.MeshBasicMaterial({ color: 0xff0077 });
+      // var edge_material = new THREE.MeshBasicMaterial({ color: 0xff0077 });
+      var random_color = THREE.ColorKeywords[Object.keys(THREE.ColorKeywords)[~~(Math.random()*Object.keys(THREE.ColorKeywords).length)]];
+      var edge_material = new THREE.MeshBasicMaterial({ color: random_color });
       
       var edges = new BoxEdges(box3, 0.5, edge_material);
       box.add(edges);
