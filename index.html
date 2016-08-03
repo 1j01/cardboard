@@ -138,6 +138,31 @@
       return box;
     }
     
+    function Obstacle(w, h){
+      var obj = new THREE.Object3D();
+      var t = 5;
+      if(Math.random() < 0.5){
+        if(Math.random() < 0.33){
+          obj.add(Box(0, (h+t)/2, -w/2, t, w, h*1.2));
+        }else if(Math.random() < 0.5){
+          obj.add(Box(0, (h+t)/2, +w/2, t, w, h*1.2));
+        }else{
+          obj.add(Box(0, (h+t)/2, -w/2, t, w, h*0.6));
+          obj.add(Box(0, (h+t)/2, +w/2, t, w, h*0.6));
+        }
+      }else{
+        if(Math.random() < 0.33){
+          obj.add(Box(0, 0, 0, t, w*1.2, h));
+        }else if(Math.random() < 0.5){
+          obj.add(Box(0, h, 0, t, w*1.2, h));
+        }else{
+          obj.add(Box(0, 0, 0, t, w*0.6, h));
+          obj.add(Box(0, h, 0, t, w*0.6, h));
+        }
+      }
+      return obj;
+    }
+    
     function Tunnel(w, h, l) {
       var obj = new THREE.Object3D();
       var t = 5;
@@ -151,6 +176,12 @@
       obj.add(ceiling);
       obj.add(left_wall);
       obj.add(right_wall);
+      
+      for (var z=-l/2; z<l/2; z+=60){
+        var obstacle = Obstacle(w, h);
+        obstacle.position.x = z;
+        obj.add(obstacle);
+      }
       
       return obj;
     }
@@ -166,8 +197,8 @@
 
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700);
-      camera.position.set(0, 25, 0);
+      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700); 
+      camera.position.set(0, 25, -20);
       scene.add(camera);
 
       controls = new THREE.OrbitControls(camera, element);
