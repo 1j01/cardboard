@@ -95,7 +95,7 @@
         [6, 7],
         [7, 3],
         [3, 2],
-        // sides
+        // middle
         [1, 2],
         [0, 3],
         [5, 6],
@@ -157,7 +157,7 @@
     
     function init() {
       renderer = new THREE.WebGLRenderer();
-      renderer.setClearColor(0x555555, 1);
+      renderer.setClearColor(0x111122, 1);
       element = renderer.domElement;
       container = document.getElementById('example');
       container.appendChild(element);
@@ -198,29 +198,6 @@
 
       var light = new THREE.HemisphereLight(0x8f8877, 0x000000, 0.6);
       scene.add(light);
-
-      var texture = THREE.ImageUtils.loadTexture(
-        'textures/patterns/checker.png'
-      );
-      texture.wrapS = THREE.RepeatWrapping;
-      texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat = new THREE.Vector2(50, 50);
-      texture.anisotropy = renderer.getMaxAnisotropy();
-
-      var material = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        specular: 0xffffff,
-        shininess: 20,
-        shading: THREE.FlatShading,
-        map: texture
-      });
-
-      var geometry = new THREE.PlaneGeometry(1000, 1000);
-
-      var mesh = new THREE.Mesh(geometry, material);
-      mesh.rotation.x = -Math.PI / 2;
-      mesh.position.y = -10;
-      scene.add(mesh);
 
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
