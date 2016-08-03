@@ -145,21 +145,21 @@
       var t = 5;
       if(Math.random() < 0.5){
         if(Math.random() < 0.33){
-          obj.add(Box(0, (h+t)/2, -w/2, t, w, h*1.2));
+          obj.add(Box(0, (h+t)/2, -w/2, t, h, w*1.2));
         }else if(Math.random() < 0.5){
-          obj.add(Box(0, (h+t)/2, +w/2, t, w, h*1.2));
+          obj.add(Box(0, (h+t)/2, +w/2, t, h, w*1.2));
         }else{
-          obj.add(Box(0, (h+t)/2, -w/2, t, w, h*0.6));
-          obj.add(Box(0, (h+t)/2, +w/2, t, w, h*0.6));
+          obj.add(Box(0, (h+t)/2, -w/2, t, h, w*0.6));
+          obj.add(Box(0, (h+t)/2, +w/2, t, h, w*0.6));
         }
       }else{
         if(Math.random() < 0.33){
-          obj.add(Box(0, 0, 0, t, w*1.2, h));
+          obj.add(Box(0, 0, 0, t, h*1.2, w));
         }else if(Math.random() < 0.5){
-          obj.add(Box(0, h, 0, t, w*1.2, h));
+          obj.add(Box(0, h, 0, t, h*1.2, w));
         }else{
-          obj.add(Box(0, 0, 0, t, w*0.6, h));
-          obj.add(Box(0, h, 0, t, w*0.6, h));
+          obj.add(Box(0, 0, 0, t, h*0.6, w));
+          obj.add(Box(0, h, 0, t, h*0.6, w));
         }
       }
       return obj;
@@ -169,8 +169,8 @@
       var obj = new THREE.Object3D();
       var t = 5;
       
-      var ground = Box(0, 0, 0, l, t, h);
-      var ceiling = Box(0, h+t, 0, l, t, h);
+      var ground = Box(0, 0, 0, l, t, w);
+      var ceiling = Box(0, h+t, 0, l, t, w);
       var left_wall = Box(0, (h+t)/2, -(w+t)/2, l, h, t);
       var right_wall = Box(0, (h+t)/2, +(w+t)/2, l, h, t);
       
@@ -235,7 +235,7 @@
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
       
-      var tunnel = Tunnel(50, 50, 200);
+      var tunnel = Tunnel(60, 50, 200);
       tunnel.rotation.y = -Math.PI / 2;
       scene.add(tunnel);
     }
