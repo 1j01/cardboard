@@ -1,4 +1,4 @@
 
-# cardboard
+# VORD
 
-Experimenting with VR
+Experimental tunnel VR game prototype
