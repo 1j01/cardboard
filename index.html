@@ -23,14 +23,20 @@
 
   <script src="js/third-party/threejs/three.js"></script>
   <script src="js/third-party/threejs/StereoEffect.js"></script>
+  <script src="js/third-party/threejs/EffectComposer.js"></script>
+  <script src="js/third-party/threejs/RenderPass.js"></script>
+  <script src="js/third-party/threejs/ShaderPass.js"></script>
+  <script src="js/third-party/threejs/CopyShader.js"></script>
+  <script src="js/third-party/threejs/ConvolutionShader.js"></script>
+  <script src="js/third-party/threejs/BloomPass.js"></script>
   <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
   <script src="js/third-party/threejs/OrbitControls.js"></script>
 
   <script>
     /* global THREE */
     
-    var camera, scene, renderer;
-    var effect, controls;
+    var camera, scene, renderer, controls;
+    var stereo_effect, copy_pass, bloom_effect, render_pass, composer;
     var element, container;
 
     var clock = new THREE.Clock();
@@ -195,13 +201,31 @@
       container = document.getElementById('example');
       container.appendChild(element);
 
-      effect = new THREE.StereoEffect(renderer);
-
       scene = new THREE.Scene();
 
       camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700); 
       camera.position.set(0, 25, -20);
       scene.add(camera);
+
+      // stereo_effect = new THREE.StereoEffect(renderer);
+      render_pass = new THREE.RenderPass(scene, camera);
+      // bloom_effect = new THREE.BloomPass(5, 25, 4, 256);
+      // bloom_effect = new THREE.BloomPass(5, 25, 4, 1024);
+      // bloom_effect = new THREE.BloomPass(5, 20, 4, 256);
+      bloom_effect = new THREE.BloomPass(1, 20, 3, 1024);
+      // var effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"]);
+      // effectScreen.renderToScreen = true;
+      
+      copy_pass = new THREE.ShaderPass(THREE.CopyShader);
+      
+      copy_pass.renderToScreen = true;
+    	
+      composer = new THREE.EffectComposer(renderer);
+      composer.addPass(render_pass);
+      // composer.addPass(stereo_effect);
+      composer.addPass(bloom_effect);
+      // composer.addPass(effectScreen);
+      composer.addPass(copy_pass);
 
       controls = new THREE.OrbitControls(camera, element);
       controls.rotateUp(Math.PI / 4);
@@ -248,7 +272,10 @@
       camera.updateProjectionMatrix();
 
       renderer.setSize(width, height);
-      effect.setSize(width, height);
+      // stereo_effect.setSize(width, height);
+      // copy_pass.setSize(width, height);
+      // bloom_effect.setSize(width, height);
+      composer.setSize(width, height);
     }
 
     function update(dt) {
@@ -260,7 +287,10 @@
     }
 
     function render(dt) {
-      effect.render(scene, camera);
+      renderer.clear();
+      renderer.autoClear = false;
+      composer.render();
+      // stereo_effect.render(scene, camera);
     }
 
     function animate(t) {
