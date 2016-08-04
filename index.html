@@ -8,6 +8,7 @@
       body {
         margin: 0px;
         overflow: hidden;
+        background: #000011;
       }
       #example {
         position: absolute;
@@ -187,6 +188,17 @@
       obj.add(left_wall);
       obj.add(right_wall);
       
+      // var box3 = new THREE.Box3();
+      // // box3.setFromCenterAndSize(new THREE.Vector3(0, 0, 0), new THREE.Vector3(w, h, l));
+      // box3.setFromCenterAndSize(new THREE.Vector3(0, (h+t)/2, 0), new THREE.Vector3(l, h, w));
+      
+      // var edge_material = new THREE.MeshBasicMaterial({ color: 0xff0077 });
+      // // var random_color = THREE.ColorKeywords[Object.keys(THREE.ColorKeywords)[~~(Math.random()*Object.keys(THREE.ColorKeywords).length)]];
+      // // var edge_material = new THREE.MeshBasicMaterial({ color: random_color });
+      
+      // var edges = new BoxEdges(box3, 0.5, edge_material);
+      // obj.add(edges);
+      
       for (var z=-l/2; z<l/2; z+=60){
         var obstacle = Obstacle(w, h);
         obstacle.position.x = z;
@@ -197,7 +209,7 @@
     }
     
     function init() {
-      renderer = new THREE.WebGLRenderer();
+      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setClearColor(0x111122, 1);
       element = renderer.domElement;
       container = document.getElementById('example');
@@ -224,7 +236,7 @@
       
       scene = new THREE.Scene();
 
-      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700); 
+      camera = new THREE.PerspectiveCamera(90, 1, 0.1, 700); 
       camera.position.set(0, 25, -20);
       scene.add(camera);
 
