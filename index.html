@@ -203,28 +203,44 @@
       container = document.getElementById('example');
       container.appendChild(element);
 
-      create_world();
+      window.addEventListener('resize', resize, false);
+      setTimeout(resize, 1);
+      
+      init_game();
 
       stereo_effect = new THREE.StereoEffect(renderer);
-      render_pass = new THREE.RenderPass(scene, camera);
-      // bloom_effect = new THREE.BloomPass(5, 25, 4, 256);
-      // bloom_effect = new THREE.BloomPass(5, 25, 4, 1024);
-      // bloom_effect = new THREE.BloomPass(5, 20, 4, 256);
-      bloom_effect = new THREE.BloomPass(1, 20, 3, 1024);
-      // var effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"]);
-      // effectScreen.renderToScreen = true;
-      
-      copy_pass = new THREE.ShaderPass(THREE.CopyShader);
-      
-      copy_pass.renderToScreen = true;
+      // render_pass = new THREE.RenderPass(scene, camera);
+      // bloom_effect = new THREE.BloomPass(1, 20, 3, 1024);
+      // copy_pass = new THREE.ShaderPass(THREE.CopyShader);
+      // copy_pass.renderToScreen = true;
     	
-      composer = new THREE.EffectComposer(renderer);
-      composer.addPass(render_pass);
-      // composer.addPass(stereo_effect);
-      composer.addPass(bloom_effect);
-      // composer.addPass(effectScreen);
-      composer.addPass(copy_pass);
+      // composer = new THREE.EffectComposer(renderer);
+      // composer.addPass(render_pass);
+      // composer.addPass(bloom_effect)
+      // composer.addPass(copy_pass);
+    }
 
+    function init_game() {
+      
+      scene = new THREE.Scene();
+
+      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700); 
+      camera.position.set(0, 25, -20);
+      scene.add(camera);
+
+      collision_raycaster = new THREE.Raycaster();
+
+      var light = new THREE.HemisphereLight(0x8f8877, 0x000000, 0.6);
+      scene.add(light);
+
+      var length = 1000;
+      tunnel = Tunnel(60, 50, length);
+      tunnel.rotation.y = -Math.PI / 2;
+      tunnel.position.z -= length / 2 + 100;
+      scene.add(tunnel);
+      
+      controls = null;
+      
       // controls = new THREE.OrbitControls(camera, element);
       // controls.rotateUp(Math.PI / 4);
       // controls.target.set(
@@ -250,30 +266,6 @@
       }
       window.addEventListener('deviceorientation', setOrientationControls, true);
 
-
-    }
-
-    function create_world() {
-      
-      scene = new THREE.Scene();
-
-      camera = new THREE.PerspectiveCamera(90, 1, 0.01, 700); 
-      camera.position.set(0, 25, -20);
-      scene.add(camera);
-
-      collision_raycaster = new THREE.Raycaster();
-
-      var light = new THREE.HemisphereLight(0x8f8877, 0x000000, 0.6);
-      scene.add(light);
-
-      window.addEventListener('resize', resize, false);
-      setTimeout(resize, 1);
-      
-      var length = 1000;
-      tunnel = Tunnel(60, 50, length);
-      tunnel.rotation.y = -Math.PI / 2;
-      tunnel.position.z -= length / 2 + 100;
-      scene.add(tunnel);
     }
 
     function resize() {
@@ -285,9 +277,7 @@
 
       renderer.setSize(width, height);
       stereo_effect.setSize(width, height);
-      // copy_pass.setSize(width, height);
-      // bloom_effect.setSize(width, height);
-      composer.setSize(width, height);
+      // composer.setSize(width, height);
     }
 
     function update(dt) {
@@ -298,26 +288,21 @@
       if(controls){
         controls.update(dt);
       }
-      // camera.translateZ(-1);
+      
       camera.translateZ(-dt * 10);
-      // console.log(dt);
       
       var center = new THREE.Vector2(0, 0);
       collision_raycaster.setFromCamera(center, camera);
       collision_raycaster.far = 10;
       
-      // var intersects = raycaster.intersectObjects(scene.children);
-      // var intersects = raycaster.intersectObjects(tunnel.children);
       var intersects = collision_raycaster.intersectObjects(blocks);
       
       for (var i = 0; i < intersects.length; i++) {
         intersects[i].object.material.color.set( 0xff0000 );
       }
       
-      // console.log(intersects.length);
       if(intersects.length){
-        // init();
-        create_world();
+        init_game();
       }
     }
 
